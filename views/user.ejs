@@ -1,0 +1,18 @@
+<% include partials/header %>
+
+<h1>
+    <%= user.displayName %> - Profil
+</h1>
+<h4><%= user.email%></h4>
+<hr>
+
+<h5>Ses chansons favoris</h5>
+<ul>
+    <% songs.forEach(function(song) {%>
+    <li>
+        <a href="/songs/<%=song._id%>"><%= song.title%></a> | <%= song.artist%>
+    </li>
+    <% }) %>
+</ul>
+<hr>
+<% include partials/footer %>

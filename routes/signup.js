@@ -2,7 +2,7 @@ var _ = require('lodash');
 var express = require('express');
 var bcrypt = require('bcrypt');
 var router = express.Router();
-var UserService = require('./users');
+var UserService = require('../services/users');
 
 router.get('/', function(req, res) {
     var err = (req.session.err) ? req.session.err : null;
@@ -16,13 +16,13 @@ router.get('/', function(req, res) {
 
 var bodyVerificator = function(req, res, next) {
     var attributes = _.keys(req.body);
-    var mandatoryAttributes = ['username', 'password', 'displayName'];
+    var mandatoryAttributes = ['username', 'password', 'email', 'displayName'];
     var missingAttributes = _.difference(mandatoryAttributes, attributes);
     if (missingAttributes.length) {
         res.status(400).send({err: missingAttributes.toString()});
     }
     else {
-        if (req.body.username && req.body.password && req.body.displayName) {
+        if (req.body.username && req.body.password && req.body.displayName && req.body.email) {
             next();
         }
         else {
@@ -40,6 +40,7 @@ var bodyVerificator = function(req, res, next) {
 
 router.post('/', bodyVerificator, function(req, res) {
     if (req.accepts('application/json') || req.accepts('text/html')) {
+        //return res.status(200).send(UserService);
         UserService.findOneByQuery({username: req.username})
             .then(function(user) {
                 if (user) {

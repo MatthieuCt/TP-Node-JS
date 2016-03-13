@@ -1,0 +1,28 @@
+<% include partials/header %>
+
+<h1>
+    <%= users.length %> utilisateurs
+</h1>
+
+<form id="search_form" action="/users" method="get">
+    <label for="search">
+        Filtrer Par:
+    </label>
+    <select id="search" style="display: block;" name="search_type">
+        <option value="displayName">Name</option>
+        <option value="email">Album</option>
+    </select>
+
+    <input name="search_field" type="text" placeholder="Votre recherche"/>
+
+    <button type="submit">Rechercher</button>
+</form>
+
+<ul>
+    <% users.forEach(function(user) {%>
+        <li>
+            <a href="/users/<%=user._id%>"><%= user.displayName%></a> | <%= user.username%> | <%= user.email%>
+        </li>
+    <% }) %>
+</ul>
+<% include partials/footer %>

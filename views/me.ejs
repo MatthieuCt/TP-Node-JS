@@ -1,0 +1,39 @@
+<% include partials/header %>
+
+<h1>
+    <%= user.displayName %> - Profil
+</h1>
+<h4><%= user.email%></h4>
+<hr>
+<h5>Vos informations</h5>
+<p>Nom public: <%= user.displayName %></p>
+<p>Nom d'utlisateur: <%= user.username %></p>
+<p>Crée le: <%= user.createdAt %></p>
+<p>Email: <%= user.email %></p>
+<hr>
+<h5>Mes chansons favoris</h5>
+<ul>
+    <% songs.forEach(function(song) {%>
+    <li>
+        <a href="/songs/<%=song._id%>"><%= song.title%></a> | <%= song.artist%> |
+        <form method="post" action="/users/favorite/<%=song._id%>?_method=delete">
+            <button type="submit">Supprimer des favoris !</button>
+        </form>
+    </li>
+    <% }) %>
+    <% if(songs) {%>
+        <li>
+            <form method="post" action="/users/favorite?_method=delete">
+                <button type="submit">Supprimer tout !</button>
+            </form>
+        </li>
+    <% }%>
+</ul>
+<hr>
+<h5>Vos amis</h5>
+<hr>
+<h5>Ils veulent vous ajouter</h5>
+<hr>
+<h5>Vous voulez les ajouter</h5>
+<hr>
+<% include partials/footer %>

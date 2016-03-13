@@ -1,7 +1,9 @@
 var express = require('express');
 var _ = require('lodash');
 var router = express.Router();
-var SongService = require('./songs');
+var SongService = require('../services/songs');
+var RateService = require('../services/rates');
+var UserService = require('../services/users');
 
 var verifyIsAdmin = function(req, res, next) {
     if (req.isAuthenticated() && req.user.username === 'admin') {
@@ -14,7 +16,9 @@ var verifyIsAdmin = function(req, res, next) {
 
 router.get('/', function(req, res) {
     if (req.accepts('text/html') || req.accepts('application/json')) {
-        SongService.find(req.query || {})
+        var query = [req.query.search_type+': '+req.query.search_field];
+        console.log(query, req.query);
+        SongService.find(req.query)
             .then(function(songs) {
                 if (req.accepts('text/html')) {
                     return res.render('songs', {songs: songs});
@@ -51,12 +55,28 @@ router.get('/:id', function(req, res) {
                     res.status(404).send({err: 'No song found with id' + req.params.id});
                     return;
                 }
-                if (req.accepts('text/html')) {
-                    return res.render('song', {song: song});
-                }
-                if (req.accepts('application/json')) {
-                    return res.send(200, song);
-                }
+                RateService.findOneByQuery({song_id: req.params.id, username: req.user.username})
+                    .then(function(rate) {
+
+                        UserService.findOneByQuery({_id: req.user._id})
+                            .then(function(user) {
+                                if (req.accepts('text/html')) {
+                                    return res.render('song', {song: song, rate: rate, favorite: user.favoriteSongs.indexOf(req.params.id)});
+                                }
+                                if (req.accepts('application/json')) {
+                                    return res.send(200, song);
+                                }
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                                res.status(500).send(err);
+                            });
+
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                        res.status(500).send(err);
+                    });
             })
             .catch(function(err) {
                 console.log(err);

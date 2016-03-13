@@ -1,9 +1,9 @@
 {
-  "name": "social-music-api-ortega",
+  "name": "music-api-cayet",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "engines": {
     "node": "4.2.4",
@@ -24,6 +24,7 @@
     "morgan": "~1.6.1",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "nodemon": "^1.8.1"
   }
 }
