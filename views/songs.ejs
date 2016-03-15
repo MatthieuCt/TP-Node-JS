@@ -4,22 +4,33 @@
     <%= songs.length %> chansons
 </h1>
 
-<form id="search_form" action="/songs" method="get">
-    <label for="search">
-        Filtrer Par:
-    </label>
-    <select id="search" style="display: block;" name="search_type">
-        <option value="title">Title</option>
-        <option value="album">Album</option>
-        <option value="artist">Artist</option>
-        <option value="year">Year</option>
-        <option value="bpm">BPM</option>
-    </select>
+<hr>
 
-    <input name="search_field" type="text" placeholder="Votre recherche"/>
+<form id="search_form" class="col s12" action="/songs" method="get">
+    <div class="row">
+        <div class="col s3">
+            <label for="search">
+                Filtrer Par:
+            </label>
+            <select id="search" style="display: block;" name="search_type">
+                <option value="title">Title</option>
+                <option value="album">Album</option>
+                <option value="artist">Artist</option>
+                <option value="year">Year</option>
+                <option value="bpm">BPM</option>
+            </select>
+        </div>
+        <div class="col s6">
+            <input name="search_field" type="text" placeholder="Votre recherche"/>
+        </div>
+            <button class="waves-effect waves-light btn blue darken-3" type="submit">Rechercher</button>
 
-    <button type="submit">Rechercher</button>
+    </div>
+
+
 </form>
+
+<hr>
 
 <table class="highlight striped ">
     <thead>
@@ -33,6 +44,7 @@
         <% } %>
 
     </thead>
+    <% if(songs.length>0) {%>
     <% songs.forEach(function(song) {%>
         <tr>
             <td>
@@ -48,21 +60,23 @@
             </td>
             <% if (user_admin) { %>
             <td>
-                <a href="/songs/edit<%= song._id%>">Editer</a>
-                |
-                <form method="post" action="/songs/<%=song._id%>?_method=delete">
-                    <button type="submit">Supprimer</button>
+                <a class="waves-effect waves-light btn col s6" href="/songs/edit<%= song._id%>">Editer</a>
+                <br>
+                <form class="col s6" method="post" action="/songs/<%=song._id%>?_method=delete">
+                    <button class="waves-effect waves-light btn red " type="submit">Supprimer</button>
                 </form>
             </td>
             <% } %>
         </tr>
-    <% }) %>
+    <% })} %>
 </table>
-<hr>
 <% if (user_admin) { %>
-    <a href="/songs/add">+ Ajouter une nouvelle chanson</a> |
-    <form method="post" action="/songs?_method=delete">
-        <button type="submit">Supprimer tout</button>
+<hr>
+<div class="row">
+    <a class="waves-effect waves-light btn col s4" href="/songs/add">+ Ajouter une nouvelle chanson</a>
+    <form class="col s4" method="post" action="/songs?_method=delete">
+        <button class=" waves-effect waves-light btn red" type="submit">Supprimer tout</button>
     </form>
+</div>
 <% } %>
 <% include partials/footer %>

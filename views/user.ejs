@@ -7,39 +7,48 @@
 <hr>
 <% if(relationship === null) {%>
 <form method="post" action="/relationships/<%=user._id%>">
-    <button type="submit">Demander en ami</button>
+    <button class="waves-effect waves-light btn" type="submit">Demander en ami</button>
 </form>
 <% } else if (relationship.confirmed === true) {%>
 <h5> Vous êtes amis ! :) </h5>
 <form action="/relationships/<%=relationship._id%>?_method=delete" method="post">
-    <button type="submit">Supprimer</button>
+    <button class="waves-effect waves-light btn red" type="submit">Supprimer</button>
 </form>
 <% } else if (relationship.enquirer_id.toString() === user._id.toString()) {%>
  <h5>Il vous demande en ami, vous pouvez:</h5>
 
 <form action="/relationships/<%=relationship._id%>?_method=put" method="post">
-    <button type="submit">Accepter</button>
+    <button class="waves-effect waves-light btn" type="submit">Accepter</button>
 </form>
 |
 <form action="/relationships/<%=relationship._id%>?_method=delete" method="post">
-    <button type="submit">Refuser</button>
+    <button class="waves-effect waves-light btn red" type="submit">Refuser</button>
 </form>
 <% } else {%>
     <h5>Vous voulez l'ajouter</h5>
 <form action="/relationships/<%=relationship._id%>?_method=delete" method="post">
-    <button type="submit">Annuler</button>
+    <button class="waves-effect waves-light btn red" type="submit">Annuler</button>
 </form>
 <% }%>
 <hr>
 
 
 <h5>Ses chansons favoris</h5>
-<ul>
+<table>
+    <thead>
+    <th>Titre</th>
+    <th>Artiste</th>
+    </thead>
     <% songs.forEach(function(song) {%>
-    <li>
-        <a href="/songs/<%=song._id%>"><%= song.title%></a> | <%= song.artist%>
-    </li>
+    <tr>
+        <td>
+            <a href="/songs/<%=song._id%>"><%= song.title%></a>
+        </td>
+        <td>
+            <%= song.artist%>
+        </td>
+    </tr>
     <% }) %>
-</ul>
+</table>
 <hr>
 <% include partials/footer %>

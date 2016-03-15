@@ -216,7 +216,12 @@ router.put('/:id', verifyIsAdmin, function(req, res) {
 router.delete('/', verifyIsAdmin, function(req, res) {
     SongService.deleteAll()
         .then(function() {
-            res.status(204);
+            if (req.accepts('text/html')) {
+                return res.redirect('/songs?message=success');
+            }
+            if (req.accepts('application/json')) {
+                return res.status(204);
+            }
         })
         .catch(function(err) {
             res.status(500).send(err);

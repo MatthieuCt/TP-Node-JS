@@ -1,5 +1,11 @@
 <% include partials/header %>
    <h1><%=song.title%></h1>
+
+<% if(favorite < 0) {%>
+<a class="waves-effect waves-light btn" href="/users/favorite/<%=song._id%>">Ajouter aux favoris</a>
+<% } else {%>
+<a class="btn disabled">Favoris</a>
+<% } %>
    <hr/>
    Album  : <%=song.album%><br/>
    Artist : <%=song.artist%><br/>
@@ -13,18 +19,17 @@
 
 <%if(typeof rate === 'undefined' || rate === null) {%>
 <h3>Notes la chanson !</h3>
-<form method="post" action="/rates/<%= song.id%>">
-   <label for="rate">Vote: </label>
-   <select id="rate" name="rate" style="display: block">
-      <option value="0">0</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-   </select>
-   <button type="submit">Voter</button>
-</form>
+   <form class="row" method="post" action="/rates/<%= song.id%>">
+      <select class="col s6" id="rate" name="rate" style="display: block">
+         <option value="0">0</option>
+         <option value="1">1</option>
+         <option value="2">2</option>
+         <option value="3">3</option>
+         <option value="4">4</option>
+         <option value="5">5</option>
+      </select>
+      <button class="waves-effect waves-light btn blue darken-3" type="submit">Voter</button>
+   </form>
 
 
 <%} else {%>
@@ -39,18 +44,9 @@
 <h5>Vous avez déjà voté :)</h5>
 <% } %>
 <hr>
-<% if(favorite < 0) {%>
-   <form action="/users/favorite/<%=song._id%>" method="get">
-      <button type="submit">Ajouter aux favoris</button>
-   </form>
-<% } else {%>
-   <h3>Cette chanson fait partie de vos favoris ! :)</h3>
-<% } %>
-<hr>
    <% if (user_admin) { %>
-   <a href="/songs/edit/<%=song._id%>">Editer</a> |
-   <a href="/songs/add">Ajouter une nouvelle chanson</a> |
+   <a class="waves-effect waves-light btn" href="/songs/edit/<%=song._id%>">Editer</a>
    <% } %>
-   <a href="/songs">Toutes les chansons</a>
+   <a class="waves-effect waves-light btn blue darken-3" href="/songs">Toutes les chansons</a>
 
 <% include partials/footer %>

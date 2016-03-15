@@ -32,7 +32,6 @@ router.get('/me', function(req, res, next) {
                 .then(function(songs) {
                     RelationshipService.findWhereConcerned(req.user._id)
                         .then(function(relations) {
-                            console.log(relations);
                             var friends = [];
                             var pendings = [];
                             var gottaAnswer = [];

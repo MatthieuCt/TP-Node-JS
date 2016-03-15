@@ -4,30 +4,27 @@
     <%= users.length %> utilisateurs
 </h1>
 
-<form id="search_form" action="/users" method="get">
-    <label for="search">
-        Filtrer Par:
-    </label>
-    <select id="search" style="display: block;" name="search_type">
-        <option value="displayName">Name</option>
-        <option value="email">Album</option>
-    </select>
+<table class="highlight striped ">
+    <thead>
+    <th>Pseudo</th>
+    <th>Date d'Arrivée</th>
+    <th>Email</th>
 
-    <input name="search_field" type="text" placeholder="Votre recherche"/>
-
-    <button type="submit">Rechercher</button>
-</form>
-
-<ul>
-    <% users.forEach(function(user) {%>
-        <li>
-            <a href="/users/<%=user._id%>"><%= user.displayName%></a> | <%= user.username%> | <%= user.email%>
-        </li>
-    <% }) %>
-</ul>
+    </thead>
+    <% if(users.length>0) {users.forEach(function(user) {%>
+    <tr>
+        <td>
+            <a href="/users/<%=user._id%>"><%= user.displayName%></a>
+        </td>
+        <td><%=user.createdAt%></td>
+        <td><%=user.email%></td>
+    </tr>
+    <% })} %>
+</table>
 
 
 <% if (user_admin) { %>
-<a href="/relationships">Gérer les relations</a>
+<hr>
+<a class="waves-effect waves-light btn blue darken-3" href="/relationships">Gérer les relations</a>
 <% } %>
 <% include partials/footer %>

@@ -2,32 +2,40 @@
 
 <h1>Accueil</h1>
 
-<table class="highlight striped ">
-   <thead>
-   <th>Title</th>
-   <th>Artist</th>
-   <th>Note</th>
-   </thead>
-   <% songs.forEach(function(note) {%>
-   <tr>
-      <td>
-         <a href="/songs/<%=note._id%>"><%=note.song.title%></a>
-      </td>
-      <td><%=note.song.artist%></td>
-       <td><%=note.avgNote%></td>
-   </tr>
-   <% }) %>
-</table>
-<hr>
-<ul>
-    <% newestUser.forEach(function(user) {%>
-    <li>
-        <a href="/users/<%= user._id %>"><%= user.displayName %></a> <%= user.createdAt %>
-    </li>
-    <% }) %>
-</ul>
-<hr>
-<% if (user_admin) { %>
-    <a href="/songs/add">+ Ajouter une nouvelle chanson</a>
-<% } %>
+<div class="container">
+    <div class="row">
+        <table class="highlight striped col s5">
+            <thead>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Note</th>
+            </thead>
+            <%= songs%>
+            <% if(songs.length>0){songs.forEach(function(note) {%>
+            <tr>
+                <td>
+                    <a href="/songs/<%=note._id%>"><%=note.song.title%></a>
+                </td>
+                <td><%=note.song.artist%></td>
+                <td><%=note.avgNote%></td>
+            </tr>
+            <% })} %>
+            <% if (user_admin) { %>
+            <tfoot>
+                <td colspan="3">
+                    <a href="/songs/add"><button>Ajouter une nouvelle chanson</button></a>
+                </td>
+            </tfoot>
+            <% } %>
+        </table>
+
+        <ul class="col s5 offset-s2">
+            <% newestUser.forEach(function(user) {%>
+            <li>
+                <a href="/users/<%= user._id %>"><%= user.displayName %></a> <%= user.createdAt %>
+            </li>
+            <% }) %>
+        </ul>
+    </div>
+</div>
 <% include partials/footer %>

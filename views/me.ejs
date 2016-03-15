@@ -12,63 +12,116 @@
 <p>Email: <%= user.email %></p>
 <hr>
 <h5>Mes chansons favoris</h5>
-<ul>
-    <% songs.forEach(function(song) {%>
-    <li>
-        <a href="/songs/<%=song._id%>"><%= song.title%></a> | <%= song.artist%> |
-        <form method="post" action="/users/favorite/<%=song._id%>?_method=delete">
-            <button type="submit">Supprimer des favoris !</button>
-        </form>
-    </li>
+<%  if(songs.length>0){ %>
+<table>
+    <thead>
+        <th>Title</th>
+    <th>Artist</th>
+    <th>Delete</th>
+    </thead>
+    <%songs.forEach(function(song) {%>
+    <tr>
+        <td>
+            <a href="/songs/<%=song._id%>"><%= song.title%></a>
+        </td>
+        <td>
+            <%= song.artist%>
+        </td>
+        <td>
+            <form class="col" method="post" action="/users/favorite/<%=song._id%>?_method=delete">
+                <button class="waves-effect waves-light btn red" type="submit">Supprimer des favoris !</button>
+            </form>
+        </td>
+    </tr>
     <% }) %>
     <% if(songs) {%>
-        <li>
-            <form method="post" action="/users/favorite?_method=delete">
-                <button type="submit">Supprimer tout !</button>
-            </form>
-        </li>
+        <tfoot>
+        <tr>
+            <td rowspan="3">
+                <form method="post" action="/users/favorite?_method=delete">
+                    <button class="waves-effect waves-light btn red" type="submit">Supprimer tout !</button>
+                </form>
+            </td>
+        </tr>
+        </tfoot>
     <% }%>
-</ul>
+</table>
+<%} else {%>
+<p>Vous n'avez pas encore de chansons favorites. N'hésitez pas à ajouter des chansons dans vos favoris.</p>
+<a class="waves-effect waves-light btn blue darken-3" href="/songs">Toutes les chansons</a>
+<%}%>
 <hr>
 <h5>Vos amis</h5>
-<ul>
+<% if(relationships.friends.length>0){%>
+<table>
+    <thead>
+    <th>
+        Nom
+    </th>
+    <th>
+        Gestion
+    </th>
+    </thead>
     <% relationships.friends.forEach(function(relation) { %>
-    <li>
-        <a href="/users/<%= relation.friend_id%>"><%= relation.friend_name %></a>
-        <form action="/relationships/<%=relation._id%>?_method=delete" method="post">
-            <button type="submit">Supprimer</button>
-        </form>
-    </li>
+    <tr>
+        <td>
+            <a href="/users/<%= relation.friend_id%>"><%= relation.friend_name %></a>
+        </td>
+        <td>
+            <form action="/relationships/<%=relation.id%>?_method=delete" method="post">
+                <button class="waves-effect waves-light btn red" type="submit">Supprimer</button>
+            </form>
+        </td>
+    </tr>
     <% }) %>
-</ul>
+</table>
+<%} else {%>
+    <p>Vous n'avez pas encore d'amis, n'hésitez pas de faire des demandes d'amitiés aux utilisateurs.</p>
+    <a class="waves-effect waves-light btn blue darken-3" href="/users">Tous les utilisateurs</a>
+<%}%>
 <hr>
+<% if(relationships.gottaAnswer.length>0){%>
 <h5>Ils veulent vous ajouter</h5>
-<ul>
+<table>
+    <thead>
+    <th>Nom</th>
+    <th>Gestion</th>
+    </thead>
     <% relationships.gottaAnswer.forEach(function(relation){%>
-    <li>
-        <a href="/users/<%= relation.friend_id%>"><%= relation.friend_name %></a>
-
-        <form action="/relationships/<%=relation._id%>?_method=put" method="post">
-            <button type="submit">Accepter</button>
-        </form>
-        |
-        <form action="/relationships/<%=relation._id%>?_method=delete" method="post">
-            <button type="submit">Refuser</button>
-        </form>
-    </li>
+    <tr>
+        <td>
+            <a href="/users/<%= relation.friend_id%>"><%= relation.friend_name %></a>
+        </td>
+        <td>
+            <form class="col s4" action="/relationships/<%=relation.id%>?_method=put" method="post">
+                <button class="waves-effect waves-light btn" type="submit">Accepter</button>
+            </form>
+            <form class="col s4" action="/relationships/<%=relation.id%>?_method=delete" method="post">
+                <button class="waves-effect waves-light btn red" type="submit">Refuser</button>
+            </form>
+        </td>
+    </tr>
     <%})%>
-</ul>
+</table>
 <hr>
+<%}%>
+
+<% if(relationships.pendings.length>0){%>
 <h5>Vous voulez les ajouter</h5>
-<ul>
+<table>
+    <thead>
+    <th>Nom</th>
+    <th>Gestion</th>
+    </thead>
     <% relationships.pendings.forEach(function(relation){%>
     <li>
         <a href="/users/<%= relation.friend_id%>"><%= relation.friend_name %></a>
-        <form action="/relationships/<%=relation._id%>?_method=delete" method="post">
+        <form action="/relationships/<%=relation.id%>?_method=delete" method="post">
             <button type="submit">Annuler</button>
         </form>
     </li>
     <%})%>
-</ul>
+</table>
 <hr>
+<%}%>
 <% include partials/footer %>

@@ -78,9 +78,10 @@ router.post('/:id', function(req, res) {
 // PUT
 router.put('/:id', function(req, res) {
     RelationshipService.confirmRelationship(req.params.id)
-        .then(function() {
+        .then(function(relationship) {
             if (req.accepts('text/html')) {
-                return res.redirect('/relationships?message=success');
+                console.log(history.go(-1));
+                return res.redirect(history.go(-1));
             }
             if (req.accepts('application/json')) {
                 return res.status(200);
@@ -100,7 +101,7 @@ router.delete('/', verifyIsAdmin, function(req, res) {
                 return res.redirect('/relationships?message=success');
             }
             if (req.accepts('application/json')) {
-                return res.status(200);
+                return res.status(204);
             }
         })
         .catch(function(err) {
@@ -113,13 +114,14 @@ router.delete('/:id', function(req, res) {
     RelationshipService.deleteRelationship(req.params.id)
         .then(function() {
             if (req.accepts('text/html')) {
-                return res.redirect('/relationships?message=success');
+                return res.redirect(req.header('Referer')+'?message=success' || '/');
             }
             if (req.accepts('application/json')) {
                 return res.status(204);
             }
         })
         .catch(function(err) {
+            console.log(err);
             res.status(500).send(err);
         })
     ;
