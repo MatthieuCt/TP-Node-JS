@@ -22,6 +22,10 @@ exports.create = function(song) {
     return Songs.createAsync(song);
 };
 
+exports.delete = function(query) {
+    return Songs.removeAsync(query);
+};
+
 exports.deleteAll = function() {
     return Songs.removeAsync();
 };

@@ -28,6 +28,10 @@
         <th>Artist</th>
         <th>Year</th>
         <th>BPM</th>
+        <% if (user_admin) { %>
+        <th>Gestion</th>
+        <% } %>
+
     </thead>
     <% songs.forEach(function(song) {%>
         <tr>
@@ -42,11 +46,23 @@
             <td>
                 <% if (song.bpm) { %><%=song.bpm%><% } %>
             </td>
+            <% if (user_admin) { %>
+            <td>
+                <a href="/songs/edit<%= song._id%>">Editer</a>
+                |
+                <form method="post" action="/songs/<%=song._id%>?_method=delete">
+                    <button type="submit">Supprimer</button>
+                </form>
+            </td>
+            <% } %>
         </tr>
     <% }) %>
 </table>
 <hr>
 <% if (user_admin) { %>
-    <a href="/songs/add">+ Ajouter une nouvelle chanson</a>
+    <a href="/songs/add">+ Ajouter une nouvelle chanson</a> |
+    <form method="post" action="/songs?_method=delete">
+        <button type="submit">Supprimer tout</button>
+    </form>
 <% } %>
 <% include partials/footer %>

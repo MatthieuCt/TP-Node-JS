@@ -16,10 +16,31 @@ var verifyIsAdmin = function(req, res, next) {
 
 router.get('/', function(req, res) {
     if (req.accepts('text/html') || req.accepts('application/json')) {
-        var query = [req.query.search_type+': '+req.query.search_field];
+        var query = {};
+        if(req.query.search_type != undefined && req.query.search_field != undefined) {
+            var field = req.query.search_field.toString();
+            if(req.query.search_type.toString() ==='title')
+            {
+                query = { title : field};
+            } else if (req.query.search_type.toString() ==='album')
+            {
+                query = { album : field};
+            } else if (req.query.search_type.toString() ==='artist')
+            {
+                query = { artist : field};
+            } else if (req.query.search_type.toString() ==='Year')
+            {
+                query = { year : field};
+            } else if (req.query.search_type.toString() ==='BPM')
+            {
+                query = { bpm : field};
+            }
+        }
+
         console.log(query, req.query);
-        SongService.find(req.query)
+        SongService.find(query)
             .then(function(songs) {
+                console.log('songs:'+ songs);
                 if (req.accepts('text/html')) {
                     return res.render('songs', {songs: songs});
                 }
@@ -192,8 +213,19 @@ router.put('/:id', verifyIsAdmin, function(req, res) {
     ;
 });
 
+router.delete('/', verifyIsAdmin, function(req, res) {
+    SongService.deleteAll()
+        .then(function() {
+            res.status(204);
+        })
+        .catch(function(err) {
+            res.status(500).send(err);
+        })
+    ;
+});
+
 router.delete('/:id', verifyIsAdmin, function(req, res) {
-    SongService.removeAsync({_id: req.params.id})
+    SongService.delete({_id: req.params.id})
         .then(function() {
             res.status(204);
         })

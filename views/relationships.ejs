@@ -1,0 +1,32 @@
+<% include partials/header %>
+
+<h1>
+    <%= relationships.length %> relations
+</h1>
+<hr>
+<ul>
+    <% relationships.forEach(function(relationship) {%>
+    <li>
+        <a href="/users/<%=relationship.enquirer_id %>"><%=relationship.enquirer_name %></a>
+        |
+        <a href="/users/<%=relationship.target_id %>"><%=relationship.target_name %></a>
+        |
+        <%if(relationship.confirmed) {%>
+            Amis
+        <form action="/relationships/<%=relationship._id%>?_method=delete" method="post">
+            <button type="submit">Supprimer</button>
+        </form>
+        <%} else {%>
+            En attente
+        <form action="/relationships/<%=relationship._id%>?_method=delete" method="post">
+            <button type="submit">Supprimer</button>
+        </form>
+        <% } %>
+    </li>
+    <% }) %>
+</ul>
+<form method="post" action="/relationships?_method=delete">
+    <button type="submit">Supprimer toutes les relations</button>
+</form>
+<hr>
+<% include partials/footer %>

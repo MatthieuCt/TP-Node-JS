@@ -31,9 +31,44 @@
 </ul>
 <hr>
 <h5>Vos amis</h5>
+<ul>
+    <% relationships.friends.forEach(function(relation) { %>
+    <li>
+        <a href="/users/<%= relation.friend_id%>"><%= relation.friend_name %></a>
+        <form action="/relationships/<%=relation._id%>?_method=delete" method="post">
+            <button type="submit">Supprimer</button>
+        </form>
+    </li>
+    <% }) %>
+</ul>
 <hr>
 <h5>Ils veulent vous ajouter</h5>
+<ul>
+    <% relationships.gottaAnswer.forEach(function(relation){%>
+    <li>
+        <a href="/users/<%= relation.friend_id%>"><%= relation.friend_name %></a>
+
+        <form action="/relationships/<%=relation._id%>?_method=put" method="post">
+            <button type="submit">Accepter</button>
+        </form>
+        |
+        <form action="/relationships/<%=relation._id%>?_method=delete" method="post">
+            <button type="submit">Refuser</button>
+        </form>
+    </li>
+    <%})%>
+</ul>
 <hr>
 <h5>Vous voulez les ajouter</h5>
+<ul>
+    <% relationships.pendings.forEach(function(relation){%>
+    <li>
+        <a href="/users/<%= relation.friend_id%>"><%= relation.friend_name %></a>
+        <form action="/relationships/<%=relation._id%>?_method=delete" method="post">
+            <button type="submit">Annuler</button>
+        </form>
+    </li>
+    <%})%>
+</ul>
 <hr>
 <% include partials/footer %>

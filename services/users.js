@@ -10,6 +10,12 @@ exports.findAll = function() {
     return Users.findAsync();
 };
 
+exports.findWhereIdIn = function(array) {
+    return Users.find({
+        '_id': { $in: array}
+    });
+};
+
 exports.findLastUsers = function() {
     //return Users.findAsync();
     return Users.find().sort({createdAt: -1}).limit(3);

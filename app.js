@@ -15,6 +15,7 @@ var songs = require('./routes/songs');
 var signup = require('./routes/signup');
 var login = require('./routes/login');
 var rates = require('./routes/rates');
+var relationships = require('./routes/relationships');
 var database = require('./database');
 
 var app = express();
@@ -59,6 +60,7 @@ var verifyAuth = function(req, res, next) {
     if (req.isAuthenticated()) {
         res.locals.user_session = true;
         res.locals.username = req.user.username;
+        res.locals.displayName = req.user.displayName;
         res.locals.user_id = req.user._id;
         res.locals.user_admin = (req.user.username === 'admin');
         return next();
@@ -79,6 +81,7 @@ app.use('/users', users);
 app.use('/songs', songs);
 app.use('/signup', signup);
 app.use('/rates', rates);
+app.use('/relationships', relationships);
 
 app.get('/logout', function(req, res){
     req.logout();

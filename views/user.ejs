@@ -5,6 +5,33 @@
 </h1>
 <h4><%= user.email%></h4>
 <hr>
+<% if(relationship === null) {%>
+<form method="post" action="/relationships/<%=user._id%>">
+    <button type="submit">Demander en ami</button>
+</form>
+<% } else if (relationship.confirmed === true) {%>
+<h5> Vous êtes amis ! :) </h5>
+<form action="/relationships/<%=relationship._id%>?_method=delete" method="post">
+    <button type="submit">Supprimer</button>
+</form>
+<% } else if (relationship.enquirer_id.toString() === user._id.toString()) {%>
+ <h5>Il vous demande en ami, vous pouvez:</h5>
+
+<form action="/relationships/<%=relationship._id%>?_method=put" method="post">
+    <button type="submit">Accepter</button>
+</form>
+|
+<form action="/relationships/<%=relationship._id%>?_method=delete" method="post">
+    <button type="submit">Refuser</button>
+</form>
+<% } else {%>
+    <h5>Vous voulez l'ajouter</h5>
+<form action="/relationships/<%=relationship._id%>?_method=delete" method="post">
+    <button type="submit">Annuler</button>
+</form>
+<% }%>
+<hr>
+
 
 <h5>Ses chansons favoris</h5>
 <ul>
