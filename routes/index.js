@@ -29,7 +29,23 @@ router.get('/', function(req, res, next) {
             res.status(500).send(err);
         })
     ;
-  }
+     /* La logique est très bien, voici un autre façon de l'écrire en plus concis,
+     sachant qu'on peut paralleliser les requetes
+     Promise.all([SongService.getTop5SongsByNotes(), UserService.findLastUsers()])
+          .then(function(values) {
+              if (req.accepts('text/html')) {
+                  return res.render('index', {songs: values[0], newestUser: values[1]});
+              }
+              if (req.accepts('application/json')) {
+                  res.status(200).send({songs: values[0], newestUser: values[1]});
+              }
+          })
+          .catch(function(err) {
+              console.log(err);
+              res.status(500).send(err);
+          })
+      ;*/
+      }
   else {
     res.status(406).send({err: 'Not valid type for asked ressource'});
   }

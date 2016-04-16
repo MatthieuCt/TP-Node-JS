@@ -48,6 +48,7 @@ router.post('/:id', function(req, res) {
                                     }
                                     if (req.accepts('application/json')) {
                                         res.status(200).send(newrelationship);
+                                        //201!!!
                                     }
                                 })
                                 .catch(function(err) {
@@ -57,6 +58,24 @@ router.post('/:id', function(req, res) {
                         .catch(function(err){
                             res.status(500).send(err);
                         });
+                    // ce bloc t'aurais pu l'ecrire comme ça pour t'eviter le double catch et eviter le callback hell
+                    /*UserService.findOneByQuery({_id: req.params.id})
+                        .then(function(user) {
+                            return RelationshipService.createRelationship(req.user._id, req.user.displayName, user._id, user.displayName);
+                        })
+                        .then(function(newrelationship) {
+                            if (req.accepts('text/html')) {
+                                return res.redirect('/users/' + req.params.id + '?message=success');
+                            }
+                            if (req.accepts('application/json')) {
+                                res.status(201).send(newrelationship);
+                            }
+                        })
+                        .catch(function(err){
+                            res.status(500).send(err);
+                        });
+                    //--------------------
+                    */
                 } else {
                     if (req.accepts('text/html')) {
                         return res.redirect('/users/' + req.params.id + '?message=already');
@@ -81,7 +100,9 @@ router.put('/:id', function(req, res) {
         .then(function(relationship) {
             if (req.accepts('text/html')) {
                 console.log(history.go(-1));
+                //Attention, pendant l'éxécution on a ceci [ReferenceError: history is not defined]
                 return res.redirect(history.go(-1));
+                // T'aurais du faire return res.redirect('/users/me');
             }
             if (req.accepts('application/json')) {
                 return res.status(200);

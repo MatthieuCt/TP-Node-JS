@@ -221,6 +221,7 @@ router.delete('/', verifyIsAdmin, function(req, res) {
             }
             if (req.accepts('application/json')) {
                 return res.status(204);
+                // pas de send, du coup ça part en timeout
             }
         })
         .catch(function(err) {
@@ -233,6 +234,7 @@ router.delete('/:id', verifyIsAdmin, function(req, res) {
     SongService.delete({_id: req.params.id})
         .then(function() {
             res.status(204);
+            // pas de send, du coup ça part en timeout
         })
         .catch(function(err) {
             res.status(500).send(err);

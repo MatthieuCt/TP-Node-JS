@@ -2,7 +2,8 @@
 var Promise = require('bluebird');
 var Notes = Promise.promisifyAll(require('../database/rates'))
 var Songs = Promise.promisifyAll(require('../database/songs'));
-var _ = require('Lodash');
+var _ = require('lodash');
+// C'est bête, mais juste pour ça ton appli plante 
 
 exports.find = function(query) {
     return Songs.findAsync(query);

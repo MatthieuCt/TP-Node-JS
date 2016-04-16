@@ -39,6 +39,7 @@ var songBodyVerification = function(req, res, next) {
 
 
 router.post('/:id', songBodyVerification, function(req, res) {
+    // la route n'est pas assez explicite... POST /rates/123 aurait pu être POST /rates/song/123 ou encore POST /rates/user/toto/song/123
     RateService.findOneByQuery({song_id: req.params.id, username: req.user.username})
         .then(function(rate) {
             console.log(rate);
@@ -62,6 +63,7 @@ router.post('/:id', songBodyVerification, function(req, res) {
                 }
                 if (req.accepts('application/json')) {
                     return res.status(304).send({err: 'You have already vote for this song.'});
+                    // plutot un 409 - conflict
                 }
             }
         })
@@ -80,6 +82,7 @@ router.delete('/:song_id', function(req, res) {
                 }
                 if (req.accepts('application/json')) {
                     return res.status(400);
+                    // il manque un send... ceci genere un timeout
                 }
             } else {
                 RateService.delete(rate)
@@ -89,6 +92,7 @@ router.delete('/:song_id', function(req, res) {
                         }
                         if (req.accepts('application/json')) {
                             return res.status(204);
+                            // il manque un send... tu tombes en timeout
                         }
                     })
                     .catch(function(err) {
